@@ -1,0 +1,73 @@
+<XMLBody>
+    <tokens>
+        <token type="word">
+            <regex>\w+</regex>
+        </token>
+        <token type="other">
+            <regex >[^\s\w]</regex>
+        </token>
+        <token>
+            <regex type="lt" regex="<"/>
+            <regex type="gt" regex=">"/>
+            <regex type="equal">=</regex>
+            <regex type="fs">/</regex>
+        </token>
+        <token type="string">
+            <regex value="group(1)">"(.*?)"</regex>
+        </token>
+    </tokens>
+
+    <patterns>
+        <pattern type="openTag">
+            <rule>
+                <rubric>
+                    <check>type=lt</check>
+                </rubric>
+            </rule>
+            <rule type="tag">
+                <rubric>
+                    <check>type=word</check>
+                </rubric>
+            </rule>
+            <rule min="0" max="50" type="attribute">
+                <rubric>
+                    <check>type=word</check>
+                </rubric>
+                <rubric>
+                    <check>type=equal</check>
+                </rubric>
+                <rubric>
+                    <check>type=string</check>
+                </rubric>
+            </rule>
+            <rule>
+                <rubric>
+                    <check>type=gt</check>
+                </rubric>
+            </rule>
+        </pattern>
+        <pattern type="closeTag">
+            <rule>
+                <rubric>
+                    <check>type=lt</check>
+                </rubric>
+                <rubric>
+                    <check>type=fs</check>
+                </rubric>
+                <rubric>
+                    <check>type=word</check>
+                </rubric>
+                <rubric>
+                    <check>type=gt</check>
+                </rubric>
+            </rule>
+        </pattern>
+        <pattern type="phrase">
+            <rule>
+                <rubric max="1000">
+                    <check>type=word|other</check>
+                </rubric>
+            </rule>
+        </pattern>
+    </patterns>
+</XMLBody>
