@@ -4,7 +4,7 @@
             <regex>\w+</regex>
         </token>
         <token type="other">
-            <regex >[^\s\w]</regex>
+            <regex >[^\s\w]+</regex>
         </token>
         <token>
             <regex type="lt" regex="<"/>

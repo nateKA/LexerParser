@@ -11,6 +11,11 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Don't use this XMLParser. It is very specialized and can only parse the xml files structured like the tokens.xml
+ * file in resources.files folder. It is used for Lexer and Parser to interpret Tokens, Patterns, and Rules from
+ * the xml files. This cannot parse general purpose xml files
+ */
 public class XMLparser {
     private String text;
     public XMLparser(String filePath){
@@ -33,10 +38,10 @@ public class XMLparser {
         text = fixXML(text);
     }
 
-    public List<XMLElement> getXMLElements(String path, String text){
+    protected List<XMLElement> getXMLElements(String path, String text){
         return getXMLElementsHelper(path,text,"idk_yet_lol", "none");
     }
-    public List<XMLElement> getXMLElements(String path){
+    protected List<XMLElement> getXMLElements(String path){
         return getXMLElementsHelper(path,text,"idk_yet_lol", "none");
     }
     private List<XMLElement> getXMLElementsHelper(String path, String text,String tag, String attributes){
@@ -78,7 +83,7 @@ public class XMLparser {
         return tokens;
     }
 
-    public String fixXML(String str){
+    protected String fixXML(String str){
         String regex = "<(\\w+)\\s*((\\w+\\s*=\\s*(\"[^\"]*\")\\s*)*)/>";
         Pattern p =  Pattern.compile(regex);
             Matcher m =p.matcher(str);
@@ -96,71 +101,6 @@ public class XMLparser {
 
     }
 
-    public List<String> getElementVauluesAsStrings(String path){
-        List<Token> tokens = getElements(path);
-        List<String> strings = new ArrayList<>();
-
-        for(Token t: tokens){
-            Iterator<String> iter = t.getAttributes().keySet().iterator();
-
-            while(iter.hasNext()){
-                String key = iter.next();
-                String val = t.getString(key);
-                strings.add(val);
-            }
-        }
-
-        return strings;
-    }
 
 
-
-    public List<Token> getElements(String path){
-        return getElementsHelper(path,text);
-    }
-    private List<Token> getElementsHelper(String path, String text){
-        List<Token> tokens = new ArrayList<>();
-        String[] pathParts = path.split("\\.");
-
-        if(pathParts[0].trim().equals("")){
-            Token t = new Token();
-            String regex = "<(\\w+).*?>(.*?)</.*?>";
-            Matcher matcher = java.util.regex.Pattern
-                    .compile(regex).matcher(text);
-            while(matcher.find()){
-                MatchResult r = matcher.toMatchResult();
-                String key = r.group(1);
-                String value = r.group(2);
-
-                t.putInfo(key,value.trim());
-            }
-
-            tokens.add(t);
-        }else{
-            String regex = "<"+pathParts[0]+".*?>(.*?)</"+pathParts[0]+".*?>";
-            Matcher matcher = java.util.regex.Pattern
-                    .compile(regex).matcher(text);
-
-            String newPath = "";
-            for(int i = 1; i < pathParts.length; i++){
-                if(i>1){
-                    newPath += ".";
-                }
-                newPath+=pathParts[i];
-            }
-
-            while(matcher.find()){
-                MatchResult r = matcher.toMatchResult();
-                String newText = r.group(1);
-                tokens.addAll(getElementsHelper(newPath,newText));
-            }
-        }
-
-        return tokens;
-    }
-
-    public static void main(String[] args){
-        XMLparser p = new XMLparser("src/resources/files/tokens.xml");
-        System.out.println(p.getXMLElements("XMLBody.tokens.token"));
-    }
 }

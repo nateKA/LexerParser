@@ -86,8 +86,9 @@ public class Lexer {
         List<Token> newTokens = RegexHelper.search(s,tg.regex,ignoreCase);
         finalizeTokens(newTokens,tg.e,tg.inheritMap);
 
-        updateRunTimeMap(tg.e.getAttribute("type"),((System.currentTimeMillis()-start)/1000.0));
-        updateCountMap(tg.e.getAttribute("type"),newTokens.size());
+        updateRunTimeMap(tg.e.getAttribute("type"), ((System.currentTimeMillis() - start) / 1000.0));
+        updateCountMap(tg.e.getAttribute("type"), newTokens.size());
+
 
         return newTokens;
     }
@@ -105,6 +106,24 @@ public class Lexer {
         }
         int value = tokenCountMap.get(key);
         tokenCountMap.put(key,value+count);
+    }
+
+    public void printRunTimeReport(){
+        System.out.println("Tokenize times (sec)");
+        Iterator<String> iter = runTimeMap.keySet().iterator();
+        while(iter.hasNext()){
+            String key = iter.next();
+            double value = runTimeMap.get(key);
+            System.out.println("\t"+key+" -> "+value);
+        }
+
+        System.out.println("Number of Tokens found");
+        iter = tokenCountMap.keySet().iterator();
+        while(iter.hasNext()){
+            String key = iter.next();
+            int value = tokenCountMap.get(key);
+            System.out.println("\t"+key+" -> "+value);
+        }
     }
 
     /**

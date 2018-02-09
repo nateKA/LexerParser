@@ -29,6 +29,10 @@ public class Parser {
         }
     }
 
+    public void printLexerReport(){
+        lexer.printRunTimeReport();
+    }
+
     private List<Rule> getRules(XMLElement pXML,XMLparser xml){
         List<XMLElement> ruleXMLs = xml.getXMLElements("rule",pXML.getInnerXML());
         List<Rule> rules = new ArrayList<>();
