@@ -26,12 +26,21 @@ public class XMLParser {
         }catch (Exception e){
             e.printStackTrace();
         }
-        return xml.replaceAll("<!--[\\s\\S]*?-->", "");
+        return xml.replaceAll("<!--[\\s\\S]*?-->", "")
+                .replaceAll("\n{2,}","\n");
     }
 
     public static void main(String[] args){
         XMLParser xmlParser = new XMLParser();
         String xml = xmlParser.prepareFile("src/resources/files/tokens.xml");
-        System.out.println(xml);
+
+        Scanner scanner = new Scanner(xml);
+        Parser parser = new Parser();
+        parser.compile("src/resources/files/xmlTokens.xml");
+        while(scanner.hasNextLine()){
+            String line = scanner.nextLine();
+            List<Token> tokens = parser.parse(line);
+            Utilities.printTokens(tokens,line,Utilities.FINDING_REGEX_FIELD_NAME,"type","value");
+        }
     }
 }

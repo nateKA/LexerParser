@@ -38,10 +38,16 @@ public class Utilities {
     }
 
     public static void printTokens(List<Token> tokens, String origin, String...fields){
-        System.out.println(origin);
+        System.out.println("Origin = \""+origin+"\"");
         String[] row = new String[fields.length];
+        int max = 1;
+        for(String s: fields){
+            if(s==null)continue;
+            if(s.length() > max)
+                max = s.length();
+        }
         for(int i = 0; i < row.length; i++){
-            row[i] = "";
+            row[i] = String.format("|%1$-" + max + "s", fields[i]);
         }
         for(Token t: tokens) {
             int maxL = 1;
@@ -60,6 +66,7 @@ public class Utilities {
         for(String s: row){
             System.out.println(s);
         }
+        System.out.println();
     }
 
     /**
