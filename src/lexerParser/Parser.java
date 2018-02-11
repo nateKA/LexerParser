@@ -1,5 +1,6 @@
 package lexerParser;
 
+import com.sun.org.apache.regexp.internal.RE;
 import com.sun.org.apache.xml.internal.security.encryption.XMLEncryptionException;
 import resources.util.RegexHelper;
 import resources.util.Utilities;
@@ -110,6 +111,7 @@ public class Parser {
                 }
             }
         }
+        list = RegexHelper.breakApartPatterns(list);
 
         return list;
     }
@@ -118,6 +120,13 @@ public class Parser {
         List<Token> tokens = lexer.tokenize(text);
         List<PatternResult> patterns = extractPatterns(text,tokens);
         return mergePatternsToTokens(tokens,patterns);
+    }
+    private void breakApartPatterns(List<PatternResult> patterns){
+        List<Token> tokens = new ArrayList<>();
+        for(PatternResult pr: patterns){
+            tokens.add(pr.getTokensAtPatternLevel());
+        }
+        RegexHelper.breakApart(tokens);
     }
 
     public List<Token> mergePatternsToTokens(List<Token> tokens, List<PatternResult> patterns){

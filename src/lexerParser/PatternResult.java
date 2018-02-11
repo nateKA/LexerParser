@@ -3,25 +3,27 @@ package lexerParser;
 import resources.util.Utilities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class PatternResult {
-    private List<RuleResult> tokens = new ArrayList<>();
+    private List<RuleResult> rules = new ArrayList<>();
     private Token group;
     private int size = 0;
     private int start;
     private int end;
 
-    public PatternResult(Pattern pattern, List<RuleResult> tokens, String origin){
+    public PatternResult(Pattern pattern, List<RuleResult> rules, String origin){
         group = new Token();
-        this.tokens = tokens;
+        this.rules = rules;
 
-        for(RuleResult p: tokens){
+        for(RuleResult p: rules){
             size += p.size();
         }
 
-        start = tokens.get(0).getStartOffset();
-        end = tokens.get(tokens.size()-1).getEndOffset();
+        start = rules.get(0).getStartOffset();
+        end = rules.get(rules.size()-1).getEndOffset();
         group.putInfo(Utilities.FINDING_START_INDEX_NAME,start);
         group.putInfo(Utilities.FINDING_END_INDEX_NAME,end);
         group.putInfo(Utilities.FINDING_REGEX_FIELD_NAME,origin.substring(start,end));
@@ -39,7 +41,7 @@ public class PatternResult {
         return group;
     }
     public List<RuleResult> getRuleMatches(){
-        return tokens;
+        return rules;
     }
     public int size(){
         return size;
@@ -47,27 +49,70 @@ public class PatternResult {
 
     public String toString(){
         String str = "";
-        for(RuleResult pr: tokens){
+        for(RuleResult pr: rules){
             str+=pr.getGroup().toString();
         }
         return str;
     }
 
-    public List<RuleResult> getRules(String key,String value){
-        List<RuleResult> results = new ArrayList<>();
-        for(RuleResult r: tokens){
-            if(value.equals(r.getGroup().getString(key))){
-                results.add(r);
-            }
+    public void mergeWithRules(){
+        for(RuleResult rr: rules){
+            group.copyAttributes(convertToStringMap(rr.getAttributes()),Utilities.DO_NOT_COPY_ATTRIBUTES);
         }
-        return results;
+    }
+    public Token getTokensAtPatternLevel(){
+        return getGroup();
+    }
+    private HashMap<String,String> convertToStringMap(HashMap<String,Object> map){
+        HashMap<String,String> newMap = new HashMap<>();
+        Iterator<String> iter = map.keySet().iterator();
+
+        while(iter.hasNext()){
+            String key = iter.next();
+            String val = map.get(key).toString();
+            newMap.put(key,val);
+        }
+        return newMap;
     }
 
-    public List<Token> getTokens(){
+    public List<Token> getTokensAtLexerLevel(){
         List<Token> tokens = new ArrayList<>();
-        for(RuleResult pr: this.tokens){
+        for(RuleResult pr: this.rules){
             tokens.addAll(pr.getTokens());
         }
+        return tokens;
+    }
+    public Token getTokensAtLexerLevel(int i){
+        return getTokensAtLexerLevel().get(i);
+    }
+    public List<Token> getTokensAtLexerLevel(String key,String value){
+        List<Token> tokens = new ArrayList<>();
+        for(Token t: getTokensAtLexerLevel()){
+            if(value.equals(t.getString(key))){
+                tokens.add(t);
+            }
+        }
+
+        return tokens;
+    }
+    public List<Token> getTokensAtRuleLevel(){
+        List<Token> tokens = new ArrayList<>();
+        for(RuleResult pr: this.rules){
+            tokens.add(pr.getGroup());
+        }
+        return tokens;
+    }
+    public Token getTokensAtRuleLevel(int i){
+        return getTokensAtRuleLevel().get(i);
+    }
+    public List<Token> getTokensAtRuleLevel(String key,String value){
+        List<Token> tokens = new ArrayList<>();
+        for(Token t: getTokensAtRuleLevel()){
+            if(value.equals(t.getString(key))){
+                tokens.add(t);
+            }
+        }
+
         return tokens;
     }
 }

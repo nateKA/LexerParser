@@ -1,11 +1,9 @@
 package resources.util;
 
+import lexerParser.PatternResult;
 import lexerParser.Token;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,6 +72,22 @@ public class RegexHelper {
         });
     }
 
+    public static List<PatternResult> breakApartPatterns(List<PatternResult> patterns){
+        HashMap<Token,PatternResult> map = new HashMap<>();
+        List<Token> tokens = new ArrayList<>();
+        for(PatternResult pr: patterns){
+            tokens.add(pr.getTokensAtPatternLevel());
+            map.put(pr.getTokensAtPatternLevel(),pr);
+        }
+        tokens = breakApart(tokens);
+        List<PatternResult> retList = new ArrayList<>();
+        for(Token t: tokens){
+            PatternResult pr = map.get(t);
+            retList.add(pr);
+        }
+
+        return retList;
+    }
     public static List<Token> breakApart(List<Token> tokens){
         sortTokensByStart(tokens);
 
@@ -98,6 +112,7 @@ public class RegexHelper {
         return ret;
     }
     private static boolean breakHelper(List<Token> tokens, Token left, Token right){
+        //<check>type=word|month</check>
         String sleft = left.getString(Utilities.FINDING_REGEX_FIELD_NAME);
         String sright = right.getString(Utilities.FINDING_REGEX_FIELD_NAME);
         int lstart = left.getInt(Utilities.FINDING_START_INDEX_NAME);

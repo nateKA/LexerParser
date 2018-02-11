@@ -21,6 +21,9 @@ public class RuleResult {
         group.putInfo(Utilities.FINDING_REGEX_FIELD_NAME,origin.substring(s,e));
     }
 
+    public HashMap<String, Object> getAttributes(){
+        return group.getAttributes();
+    }
     public Token getFirstToken(){
         return tokens.get(0);
     }
