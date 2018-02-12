@@ -5,6 +5,7 @@ import lexerParser.Parser;
 import lexerParser.Token;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Utilities {
@@ -67,6 +68,33 @@ public class Utilities {
             System.out.println(s);
         }
         System.out.println();
+    }
+    public static void printTokensAndIgnoreAtts(List<Token> tokens,String origin,String...fields){
+        List<String> list = new ArrayList<>();
+        for(Token t: tokens){
+            Iterator<String> iter = t.getAttributes().keySet().iterator();
+            while(iter.hasNext()){
+                String key = iter.next();
+
+                if(list.contains(key))
+                    continue;
+
+                boolean include = true;
+                for(String s: fields){
+                    if(s.equals(key)){
+                        include = false;
+                        break;
+                    }
+                }
+                if(include)
+                    list.add(key);
+            }
+        }
+        String[] use = new String[list.size()];
+        for(int i = 0; i < use.length; i++){
+            use[i] = list.get(i);
+        }
+        printTokens(tokens,origin, use);
     }
 
     /**

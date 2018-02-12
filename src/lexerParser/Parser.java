@@ -26,7 +26,16 @@ public class Parser {
             Pattern p = new Pattern();
             copyMap(p.getAttributes(),pXML,Utilities.TAG,Utilities.MIN,Utilities.MAX);
             p.getRules().addAll(getRules(pXML, xml));
-            patternList.add(p);
+            if(p.getAttributes().containsKey("sequence")){
+                int i = Integer.parseInt(p.get("sequence"));
+                if(i <= patternList.size())
+                    patternList.add(i,p);
+                else
+                    patternList.add(p);
+                p.getAttributes().remove("sequence");
+            }else {
+                patternList.add(p);
+            }
         }
     }
 
@@ -141,9 +150,9 @@ public class Parser {
 
     public static void main(String[] args){
         Parser p = new Parser();
-        String text = "The Wonder Years' second  < full-length album, The Upsides, was released on January 26, 2010.";
+        String text = "The Wonder Years' second full-length album, The Upsides, was released on January 26, 2010.";
         p.compile("src/resources/files/tokens.xml");
         List<Token> list = p.parse(text);
-        Utilities.printTokens(list,text,Utilities.FINDING_REGEX_FIELD_NAME,"type","sub_type");
+        Utilities.printTokensAndIgnoreAtts(list,text);
     }
 }
