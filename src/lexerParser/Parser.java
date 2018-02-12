@@ -14,7 +14,8 @@ public class Parser {
     private Lexer lexer = null;
 
     public void compile(String xmlPath){
-        lexer = new Lexer();
+        if(lexer==null)
+            lexer = new Lexer();
         lexer.compile(xmlPath);
         XMLparser xml = new XMLparser(xmlPath);
 
