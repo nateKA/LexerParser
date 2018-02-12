@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class XMLparser {
     private String text;
-    public XMLparser(String filePath){
+    protected XMLparser(String filePath){
         String str = "";
         try {
             Scanner scanner = new Scanner(new File(filePath));
@@ -33,10 +33,10 @@ public class XMLparser {
         text = fixXML(text);
     }
 
-    public List<XMLElement> getXMLElements(String path, String text){
+    protected List<XMLElement> getXMLElements(String path, String text){
         return getXMLElementsHelper(path,text,"idk_yet_lol", "none");
     }
-    public List<XMLElement> getXMLElements(String path){
+    protected List<XMLElement> getXMLElements(String path){
         return getXMLElementsHelper(path,text,"idk_yet_lol", "none");
     }
     private List<XMLElement> getXMLElementsHelper(String path, String text,String tag, String attributes){
@@ -78,7 +78,7 @@ public class XMLparser {
         return tokens;
     }
 
-    public String fixXML(String str){
+    protected String fixXML(String str){
         String regex = "<(\\w+)\\s*((\\w+\\s*=\\s*(\"[^\"]*\")\\s*)*)/>";
         Pattern p =  Pattern.compile(regex);
             Matcher m =p.matcher(str);
@@ -96,7 +96,7 @@ public class XMLparser {
 
     }
 
-    public List<String> getElementVauluesAsStrings(String path){
+    protected List<String> getElementVauluesAsStrings(String path){
         List<Token> tokens = getElements(path);
         List<String> strings = new ArrayList<>();
 
@@ -115,7 +115,7 @@ public class XMLparser {
 
 
 
-    public List<Token> getElements(String path){
+    protected List<Token> getElements(String path){
         return getElementsHelper(path,text);
     }
     private List<Token> getElementsHelper(String path, String text){
@@ -159,8 +159,4 @@ public class XMLparser {
         return tokens;
     }
 
-    public static void main(String[] args){
-        XMLparser p = new XMLparser("src/resources/files/tokens.xml");
-        System.out.println(p.getXMLElements("XMLBody.tokens.token"));
-    }
 }

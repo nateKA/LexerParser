@@ -12,39 +12,39 @@ public class XMLElement {
     private HashMap<String,String> attributes = new HashMap<>();
     private String innerXML = null;
 
-    public XMLElement(String tag){
+    protected XMLElement(String tag){
         attributes.put(Utilities.TAG,tag);
     }
 
-    public void addAttribute(String key, String value){
+    protected void addAttribute(String key, String value){
         attributes.put(key,value);
     }
-    public void removeAttribute(String key){
+    protected void removeAttribute(String key){
         attributes.remove(key);
     }
-    public String getAttribute(String key){
+    protected String getAttribute(String key){
         return attributes.get(key);
     }
-    public HashMap<String,String> getAttributeMap(){return attributes;}
-    public void addSubElement(XMLElement e){
+    protected HashMap<String,String> getAttributeMap(){return attributes;}
+    protected void addSubElement(XMLElement e){
         subElements.add(e);
     }
-    public void addSubElements(List<XMLElement> e){
+    protected void addSubElements(List<XMLElement> e){
         subElements.addAll(e);
     }
-    public String getTag(){
+    protected String getTag(){
         return attributes.get(Utilities.TAG);
     }
 
-    public String getInnerXML() {
+    protected String getInnerXML() {
         return innerXML;
     }
 
-    public HashMap<String, String> getAttributes(){
+    protected HashMap<String, String> getAttributes(){
         return attributes;
     }
 
-    public void setInnerXML(String innerXML) {
+    protected void setInnerXML(String innerXML) {
         this.innerXML = innerXML;
     }
 
