@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
 
 public class RuleResult {
     private List<Token> tokens = new ArrayList<>();
@@ -30,6 +32,29 @@ public class RuleResult {
         while(iter.hasNext()){
             String key = iter.next();
             String value = map.get(key).toString();
+            if(value.matches("inherit\\(.*?\\(\\s*\\d+\\s*\\)\\)")){
+                Matcher m = java.util.regex.Pattern.compile("inherit\\((.*?)\\((.*?)\\)\\)").matcher(value);
+                if(m.find()){
+                    MatchResult res = m.toMatchResult();
+                    String getKey = res.group(1);
+                    int index = Integer.parseInt(res.group(2).trim());
+                    boolean found = false;
+                    int count = 0;
+                    for(Token t: tokens){
+                        if(t.getString(getKey)!=null){
+
+                            if(count == index) {
+                                found= true;
+                                toInherit.put(key, t.getString(getKey));
+                                break;
+                            }
+                            count++;
+                        }
+                    }
+                    if(!found)
+                        toRemove.add(key);
+                }
+            }else
             if(value.matches("inherit\\(.*?\\)")){
                 String getKey = value.substring(8,value.length()-1);
                 boolean found = false;
@@ -55,6 +80,7 @@ public class RuleResult {
                 if(!found)
                     toRemove.add(key);
             }
+
         }
         iter = toInherit.keySet().iterator();
         while(iter.hasNext()){
