@@ -67,7 +67,9 @@ public class XMLParser {
                 if(isOpenTag(curPR)){
                     XMLElement open = xmlElementFromPattern(patterns.get(i));
                     rootMap.get(depth-1).addSubElement(open);
-                    rootMap.put(depth++,open);
+                    rootMap.put(depth,open);
+                    if(!"noClose".equals(curPR.getGroup().getString("special")))
+                        depth++;
                 }else if(isCloseTag(curPR)){
                     depth--;
                 }else if(isPhrase(curPR)){
@@ -116,9 +118,11 @@ public class XMLParser {
 
     public static void main(String[] args){
         XMLParser parser = new XMLParser();
-        XMLDocument doc = parser.parseXML("src/resources/files/books.xml");
-        for(XMLElement e: doc.collect("catalog.book", "title","price")){
+        XMLDocument doc = parser.parseXML("src/resources/files/tokens.xml");
+        System.out.println(doc.getRoot());
+        for(XMLElement e: doc.collect("XMLBody.tokens.token.regex")){
             System.out.println(e);
         }
+        //System.out.println(doc.getRoot());
     }
 }

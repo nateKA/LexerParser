@@ -71,6 +71,7 @@ public class XMLDocument {
         for(XMLElement e: getElementsByPath(path)){
             XMLElement retEl = new XMLElement(e.getTag());
             retEl.setAttributes(e.getAttributes());
+            retEl.setInnerXML(e.getInnerXML());
             for(String tag: tags){
                 for(XMLElement subEl: e.getSubElementsByTag(tag)){
                     retEl.addSubElement(subEl);

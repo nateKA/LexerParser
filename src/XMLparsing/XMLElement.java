@@ -37,15 +37,27 @@ public class XMLElement {
     private List<XMLElement> getElHelper(String[] path, XMLElement root, int level){
         List<XMLElement> list = new ArrayList<>();
         for(XMLElement e: root.getSubElements()){
-            if(e.getTag().equals(path[level])){
-                if(level == path.length-1){
+            int elPathSize = checkPath(e.getTag(),path,level);
+            if(elPathSize > 0){
+                if(level == path.length-elPathSize){
                     list.add(e);
                 }else{
-                    list.addAll(getElHelper(path,e,level+1));
+                    list.addAll(getElHelper(path,e,level+elPathSize));
                 }
             }
         }
         return list;
+    }
+    private int checkPath(String tag, String[] path, int level){
+        String[] tagPath = tag.split("\\.");
+        int count = 0;
+        for(String str: tagPath){
+            if(count+level == path.length)return count;
+            if(str.equals(path[level+count])){
+                count++;
+            }
+        }
+        return count;
     }
 
     public String getInnerXML() {
@@ -105,7 +117,10 @@ public class XMLElement {
     public String toString(){
         String str = "";
         if(subElements.size() == 0){
-            return String.format("<%s%s>%s</%s>",tag,attsToString(),innerXML,tag);
+            if(innerXML==null)
+                return String.format("<%s%s/>",tag,attsToString());
+            else
+                return String.format("<%s%s>%s</%s>",tag,attsToString(),innerXML,tag);
         }else{
             str = String.format("<%s%s>",tag,attsToString());
             String strSub = "";
