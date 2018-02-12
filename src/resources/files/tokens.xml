@@ -63,9 +63,9 @@ Here is a list of reserveWords
         <!-- boundaries is a boolean that controls the word boundary in regex i.e. regex = '\b(\d+)\b' -->
         <!--  in other words, "a7fee78" and "73a" are not numbers -->
         <token type="number" boundaries="true" >
-            <regex sub_type="decimal">\d+</regex>
-            <regex sub_type="binary">0b\d{8}</regex>
-            <regex sub_type="hexadecimal">0x\d{1,8}</regex>
+            <regex sub_type="decimal" value="group(1)">(\d+)</regex>
+            <regex sub_type="binary" value="group(1)">0b(\d{8})</regex>
+            <regex sub_type="hexadecimal" value="group(1)">0x(\d{1,8})</regex>
         </token>
 
         <token type="reference">
@@ -118,10 +118,14 @@ Here is a list of reserveWords
     </tokens>
 
     <patterns>
-        <!-- the sequence attribute determines the order this pattern is parsed in.
-        You can also order them based on their placement in the xml doc -->
-        <pattern sequence="0" type="date">
-            <rule>
+        <!-- when an attribute is set to inherit(<requested key>), the attribute will inherit
+            the attribute with the requested key from the tokens that the pattern is found from.
+            Rules can do the same
+                syntax1: 'att=inherit(key)' when multiple are found att will be split into att_0,att_1, ... att_n
+                syntax2: 'att=inherit(key(i)) the i-th token to contain key will become the value of att
+            -->
+        <pattern type="date" month="inherit(month)" date="inherit(value(0))" year="inherit(value(1))">
+            <rule >
                 <rubric>
                     <check>type=month</check>
                 </rubric>
@@ -140,7 +144,10 @@ Here is a list of reserveWords
                 </rubric>
             </rule>
         </pattern>
-        <pattern type="word">
+        <!--  The sequence attribute will insert a pattern into the sequencial order
+            This is useful for inserting a pattern compiled from an xml ahead of patterns
+            that were compiled in a previous xml -->
+        <pattern sequence="0" type="word">
             <rule>
                 <rubric>
                     <check>type=word</check>
