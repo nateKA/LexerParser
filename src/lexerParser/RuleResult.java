@@ -18,7 +18,7 @@ public class RuleResult {
         int e = tokens.get(tokens.size()-1).getInt(Utilities.FINDING_END_INDEX_NAME);
 
         group.copyAttributes(rule.getAttributes(),Utilities.TAG);
-        group.putInfo(Utilities.FINDING_REGEX_FIELD_NAME,origin.substring(s,e));
+        group.putInfo(Utilities.FINDING_TEXT_NAME,origin.substring(s,e));
     }
 
     public HashMap<String, Object> getAttributes(){
@@ -46,6 +46,6 @@ public class RuleResult {
         return tokens.size();
     }
     public String toString(){
-        return group.getString(Utilities.FINDING_REGEX_FIELD_NAME);
+        return group.getString(Utilities.FINDING_TEXT_NAME);
     }
 }

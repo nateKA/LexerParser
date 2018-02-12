@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Utilities {
 
-    public static final String FINDING_REGEX_FIELD_NAME = "annotationText()";
+    public static final String FINDING_TEXT_NAME = "annotationText()";
     public static final String FINDING_START_INDEX_NAME = "startOffset()";
     public static final String FINDING_END_INDEX_NAME = "endOffset()";
     public static final String TAG = "XMLtag";
@@ -24,7 +24,7 @@ public class Utilities {
             TAG,IGNORE_CASE,BOUNDARIES,ADD_SLASHES
     };
     public static final String[] RESERVED_ATTRIBUTES = new String[]{
-            FINDING_REGEX_FIELD_NAME,FINDING_START_INDEX_NAME,FINDING_END_INDEX_NAME,
+            FINDING_TEXT_NAME,FINDING_START_INDEX_NAME,FINDING_END_INDEX_NAME,
     };
 
     public static Lexer getCommonLexer(){

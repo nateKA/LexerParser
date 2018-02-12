@@ -113,8 +113,8 @@ public class RegexHelper {
     }
     private static boolean breakHelper(List<Token> tokens, Token left, Token right){
         //<check>type=word|month</check>
-        String sleft = left.getString(Utilities.FINDING_REGEX_FIELD_NAME);
-        String sright = right.getString(Utilities.FINDING_REGEX_FIELD_NAME);
+        String sleft = left.getString(Utilities.FINDING_TEXT_NAME);
+        String sright = right.getString(Utilities.FINDING_TEXT_NAME);
         int lstart = left.getInt(Utilities.FINDING_START_INDEX_NAME);
         int lend = left.getInt(Utilities.FINDING_END_INDEX_NAME);
         int rstart = right.getInt(Utilities.FINDING_START_INDEX_NAME);
@@ -142,8 +142,8 @@ public class RegexHelper {
         if(lstart <= rstart && lend > rstart && lend < rend){
                 right.putInfo(Utilities.FINDING_START_INDEX_NAME, lend);
                 int overlap = Math.abs(rstart - lend);
-                right.putInfo(Utilities.FINDING_REGEX_FIELD_NAME,
-                        right.getString(Utilities.FINDING_REGEX_FIELD_NAME).substring(overlap));
+                right.putInfo(Utilities.FINDING_TEXT_NAME,
+                        right.getString(Utilities.FINDING_TEXT_NAME).substring(overlap));
                 return true;
         }
         return false;

@@ -17,12 +17,12 @@ public class Token {
     }
     public Token(String annot, String type, int start, int end){
         attributes.put("type",type);
-        attributes.put(Utilities.FINDING_REGEX_FIELD_NAME,annot);
+        attributes.put(Utilities.FINDING_TEXT_NAME,annot);
         attributes.put(Utilities.FINDING_START_INDEX_NAME,start);
         attributes.put(Utilities.FINDING_END_INDEX_NAME,end);
     }
     public Token(MatchResult result){
-        attributes.put(Utilities.FINDING_REGEX_FIELD_NAME,result.group());
+        attributes.put(Utilities.FINDING_TEXT_NAME,result.group());
         attributes.put(Utilities.FINDING_START_INDEX_NAME,result.start());
         attributes.put(Utilities.FINDING_END_INDEX_NAME,result.end());
     }

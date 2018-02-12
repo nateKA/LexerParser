@@ -102,6 +102,18 @@ Here is a list of reserveWords
         <token form="capitalized" boundaries="true">
             <regex>[A-Z][a-zA-Z]+</regex>
         </token>
+        <token type="placement" ignoreCase="true">
+            <regex value="1">first|1st</regex>
+            <regex value="2">second|2nd</regex>
+            <regex value="3">third|3rd</regex>
+            <regex value="4">fourth|4th</regex>
+            <regex value="5">fifth|5th</regex>
+            <regex value="6">sixth|6th</regex>
+            <regex value="7">seventh|7th</regex>
+            <regex value="8">eighth|8th</regex>
+            <regex value="9">ninth|9th</regex>
+            <regex value="10">tenth|10th</regex>
+        </token>
 
     </tokens>
 

@@ -179,7 +179,7 @@ public class Rubric {
         List<Token> tokens = lexer.tokenize("Some one was born on August 3, 1983");
 
         for(Token t: tokens){
-            System.out.println(t.getInfo(Utilities.FINDING_REGEX_FIELD_NAME)+" - "+rubric.testToken(t));
+            System.out.println(t.getInfo(Utilities.FINDING_TEXT_NAME)+" - "+rubric.testToken(t));
         }
     }
 }

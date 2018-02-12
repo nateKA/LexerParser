@@ -26,7 +26,7 @@ public class PatternResult {
         end = rules.get(rules.size()-1).getEndOffset();
         group.putInfo(Utilities.FINDING_START_INDEX_NAME,start);
         group.putInfo(Utilities.FINDING_END_INDEX_NAME,end);
-        group.putInfo(Utilities.FINDING_REGEX_FIELD_NAME,origin.substring(start,end));
+        group.putInfo(Utilities.FINDING_TEXT_NAME,origin.substring(start,end));
         group.copyAttributes(pattern.getAttributes(),Utilities.TAG);
 
     }

@@ -6,10 +6,7 @@ import resources.util.RegexHelper;
 import resources.util.Utilities;
 
 import javax.rmi.CORBA.Util;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Parser {
 
@@ -154,5 +151,6 @@ public class Parser {
         p.compile("src/resources/files/tokens.xml");
         List<Token> list = p.parse(text);
         Utilities.printTokensAndIgnoreAtts(list,text);
+
     }
 }

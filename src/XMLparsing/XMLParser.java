@@ -72,7 +72,7 @@ public class XMLParser {
                     depth--;
                 }else if(isPhrase(curPR)){
                     rootMap.get(depth-1).setInnerXML(
-                            curPR.getGroup().getString(Utilities.FINDING_REGEX_FIELD_NAME));
+                            curPR.getGroup().getString(Utilities.FINDING_TEXT_NAME));
                 }else if(isProlog(curPR)){
                     System.out.println("Also found Prolog");
                 }
@@ -90,7 +90,7 @@ public class XMLParser {
         XMLElement e = new XMLElement(getTag(pr));
         for(Token t: pr.getTokensAtRuleLevel("type","attribute")){
             Matcher m = java.util.regex.Pattern.compile("(\\w+)=\"(.*?)\"")
-                    .matcher(t.getString(Utilities.FINDING_REGEX_FIELD_NAME));
+                    .matcher(t.getString(Utilities.FINDING_TEXT_NAME));
             if(m.find()){
                 MatchResult res = m.toMatchResult();
                 e.addAttribute(res.group(1),res.group(2));
@@ -100,7 +100,7 @@ public class XMLParser {
     }
 
     private String getTag(PatternResult p){
-        return p.getTokensAtRuleLevel("type","tag").get(0).getString(Utilities.FINDING_REGEX_FIELD_NAME);
+        return p.getTokensAtRuleLevel("type","tag").get(0).getString(Utilities.FINDING_TEXT_NAME);
     }
 
     private boolean isOpenTag(PatternResult p){
