@@ -33,7 +33,7 @@ public class RuleResult {
             String key = iter.next();
             String value = map.get(key).toString();
             if(value.matches("inherit\\(.*?\\(\\s*\\d+\\s*\\)\\)")){
-                Matcher m = java.util.regex.Pattern.compile("inherit\\((.*?)\\((.*?)\\)\\)").matcher(value);
+                Matcher m = java.util.regex.Pattern.compile("inherit\\((.*?)\\((\\d+)\\)\\)").matcher(value);
                 if(m.find()){
                     MatchResult res = m.toMatchResult();
                     String getKey = res.group(1);
@@ -54,8 +54,24 @@ public class RuleResult {
                     if(!found)
                         toRemove.add(key);
                 }
+            }else if(value.matches("inherit\\(.*?\\(\\s*last\\s*\\)\\)")){
+                Matcher m = java.util.regex.Pattern.compile("inherit\\((.*?)\\((last)\\)\\)").matcher(value);
+                if(m.find()){
+                    MatchResult res = m.toMatchResult();
+                    String getKey = res.group(1);
+                    boolean found = false;
+                    for(Token t: tokens){
+                        if(t.getString(getKey)!=null){
+
+                            found= true;
+                            toInherit.put(key, t.getString(getKey));
+                        }
+                    }
+                    if(!found)
+                        toRemove.add(key);
+                }
             }else
-            if(value.matches("inherit\\(.*?\\)")){
+            if(value.matches("inherit\\(.*\\)")){
                 String getKey = value.substring(8,value.length()-1);
                 boolean found = false;
                 int count = 0;
