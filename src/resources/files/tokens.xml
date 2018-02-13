@@ -123,6 +123,7 @@ Here is a list of reserveWords
             Rules can do the same
                 syntax1: 'att=inherit(key)' when multiple are found att will be split into att_0,att_1, ... att_n
                 syntax2: 'att=inherit(key(i)) the i-th token to contain key will become the value of att
+            If no token containing the key is found, the attribute is removed from the PatternResult
             -->
         <pattern type="date" month="inherit(month)" date="inherit(value(0))" year="inherit(value(1))">
             <rule >
@@ -165,7 +166,10 @@ Here is a list of reserveWords
             <rule>
                 <rubric min="2" max="10">
                     <check>form=capitalized</check>
-                    <check>type=word|month</check>
+                    <!-- The 'AND;' portion tells the Parser to logically AND this check
+                        with every previous check (Since the parser works from top to bottom).
+                        A check can also be logical OR as in 'OR;' -->
+                    <check>AND;type=word|month</check>
                 </rubric>
             </rule>
         </pattern>

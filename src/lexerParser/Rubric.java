@@ -25,8 +25,11 @@ public class Rubric {
             this.value = value;
         }
     };
+    private static final String AND = "AND";
+    private static final String OR = "OR";
 
     private HashMap<String,Comparator> compareMap = new HashMap<>();
+    private List<String> logic = new ArrayList<>();
     private int min = 1;
     private int max = 1;
     private HashMap<String,Object> checkMap = new HashMap<>();
@@ -68,9 +71,16 @@ public class Rubric {
         boolean passing = true;
 
         Iterator<String> iter = checkMap.keySet().iterator();
+        int i = 0;
         while(iter.hasNext()){
             String key = iter.next();
-            passing = passing && check(key, t);
+            if(logic.get(i).equals(AND)) {
+                passing = passing && check(key, t);
+            }else{
+                passing = passing || check(key, t);
+            }
+
+            i++;
         }
 
         return passing;
@@ -137,13 +147,19 @@ public class Rubric {
 
     public void compile(String...checks){
         for(String s: checks){
-            Matcher m = Pattern.compile("(\\w+)(!=|<=|>=|<|>|=)(.+)").matcher(s);
+            Matcher m = Pattern.compile("(("+AND+"|"+OR+");)?(\\w+)(!=|<=|>=|<|>|=)(.+)").matcher(s);
             if(m.find()){
                 MatchResult result = m.toMatchResult();
 
-                String key = result.group(1);
-                Comparator c = fillComparator(result.group(2),result.group());
-                Object value = getValue(result.group(3));
+                String key = result.group(3);
+                Comparator c = fillComparator(result.group(4),result.group());
+                Object value = getValue(result.group(5));
+                String logic = result.group(2);
+                if(logic==null){
+                    this.logic.add(AND);
+                }else{
+                    this.logic.add(logic);
+                }
 
                 checkMap.put(key,value);
                 compareMap.put(key,c);
