@@ -5,6 +5,99 @@ of the Lexer/Parser that generate from xmls.
 
 The xml you create should follow the same schema, or your parser will not compile correctly
 
+Here is the way LexerParser works
+    Compile
+        - Parser is created, it contains a lexer=null.
+        - parser.compile(file) is called. Now the parser instantiates a lexer.
+        - lexer compiles the Token section of the xml, parser compiles the pattern section.
+    Parsing
+        - parser.parse(...) or parser.extractPatterns(...) is called.
+        - the parser will call lexer.tokenize(...) to get an initial list of Tokens
+        - parser will then start at the first Token in the list, and try to match a Pattern
+        - The first Pattern to match will be the accepted Pattern. This will be added to a list of Patterns
+        - parser will now pick the first Token that was not part of the Pattern and follows all other Tokens in the Pattern.
+            If no Pattern matched, then parser looks at the next Token in the list
+        - parser reaches the end of the list of Tokens. Now, if parser.extractPatterns(...) was called, parser returns
+            the list of accepted Patterns. If parser.parse(...) was called, parser will convert the Patterns into Tokens
+            and merge them into the list of Tokens found by the lexer. This new list of Tokens is returned.
+
+    Here is a visual representation of how a Parser that compiles this xml would parse the following text.
+
+    Original text - "This sample text was created on February 20, 2018 to demonstrate LexerParser"
+
+    parser.parse(...) is called on text
+
+    Lexer Tokenizes - |This|sample|text|was |created|on  |February|20    |,    |2018  |to  |demonstrate|LexerParser|
+                      |word|word  |word|word|word   |word|month   |number|punct|number|word|word       |word       |
+
+    Parser parses Patterns (*-parser is looking here    +-pattern matches up to here
+           *
+          |This|sample|text|was |created|on  |February|20    |,    |2018  |to  |demonstrate|LexerParser|
+          |word|word  |word|word|word   |word|month   |number|punct|number|word|word       |word       |
+          list = []
+                *
+          |This|sample|text|was |created|on  |February|20    |,    |2018  |to  |demonstrate|LexerParser|
+          |word|word  |word|word|word   |word|month   |number|punct|number|word|word       |word       |
+          list = []
+
+
+            ...
+
+                                         *
+          |This|sample|text|was |created|on  |February|20    |,    |2018  |to  |demonstrate|LexerParser|
+          |word|word  |word|word|word   |word|month   |number|punct|number|word|word       |word       |
+          list = []
+
+
+                                              *+
+          |This|sample|text|was |created|on  |February|20    |,    |2018  |to  |demonstrate|LexerParser|
+          |word|word  |word|word|word   |word|month   |number|punct|number|word|word       |word       |
+          list = []
+
+
+                                              *         +
+          |This|sample|text|was |created|on  |February|20    |,    |2018  |to  |demonstrate|LexerParser|
+          |word|word  |word|word|word   |word|month   |number|punct|number|word|word       |word       |
+          list = []
+
+
+                                              *                +
+          |This|sample|text|was |created|on  |February|20    |,    |2018  |to  |demonstrate|LexerParser|
+          |word|word  |word|word|word   |word|month   |number|punct|number|word|word       |word       |
+          list = []
+
+
+                                              *                      +
+          |This|sample|text|was |created|on  |February|20    |,    |2018  |to  |demonstrate|LexerParser|
+          |word|word  |word|word|word   |word|month   |number|punct|number|word|word       |word       |
+          list = []
+
+
+      Pattern created from "|February|20    |,    |2018  |" called 'date'
+
+                                                                            *
+          |This|sample|text|was |created|on  |February|20    |,    |2018  |to  |demonstrate|LexerParser|
+          |word|word  |word|word|word   |word|month   |number|punct|number|word|word       |word       |
+          list = [date]
+                                                                                   *
+          |This|sample|text|was |created|on  |February|20    |,    |2018  |to  |demonstrate|LexerParser|
+          |word|word  |word|word|word   |word|month   |number|punct|number|word|word       |word       |
+          list = [date]
+
+
+                                                                                             *
+          |This|sample|text|was |created|on  |February|20    |,    |2018  |to  |demonstrate|LexerParser|
+          |word|word  |word|word|word   |word|month   |number|punct|number|word|word       |word       |
+          list = [date]
+
+
+      Done parsing. Now parser converts Patterns into Tokens and Merges
+
+      Final Tokens
+
+          |This|sample|text|was |created|on  |February 20, 2018                |to  |demonstrate|LexerParser|
+          |word|word  |word|word|word   |word|date                             |word|word       |word       |
+
 Many elements contain attributes that are 'reserveWords' for compiling the lexer/parser. reserveWords fall into two categories
 'compileTime' - The reserveWord is used to compile the Lexer/Parser and will not appear in Tokens
 'runTime' - The reserveWord is reserved for the Lexer/Parser to add to the tokens. These are bits of information

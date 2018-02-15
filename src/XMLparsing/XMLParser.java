@@ -121,7 +121,7 @@ public class XMLParser {
         XMLDocument doc = parser.parseXML("src/resources/files/test.xml");
         System.out.println(doc.getRoot());
         for(XMLElement e: doc.collectAllByTag("bottom")){
-            System.out.println(e);
+            //System.out.println(e);
         }
         //System.out.println(doc.getRoot());
     }

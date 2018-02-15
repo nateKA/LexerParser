@@ -19,6 +19,7 @@
     </tokens>
 
     <patterns>
+
         <pattern type="prolog">
             <rule>
                 <rubric>
@@ -53,7 +54,7 @@
                 </rubric>
             </rule>
         </pattern>
-        <pattern type="openTag" special="noClose">
+        <pattern type="openTag" tag="inherit(type=word(0))" special="noClose">
             <rule>
                 <rubric>
                     <check>type=lt</check>
@@ -84,7 +85,7 @@
                 </rubric>
             </rule>
         </pattern>
-        <pattern type="openTag" tag="inherit(type=word(last))">
+        <pattern type="openTag" tag="inherit(type=word(0))">
             <rule>
                 <rubric>
                     <check>type=lt</check>
