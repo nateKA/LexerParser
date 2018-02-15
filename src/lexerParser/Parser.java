@@ -150,8 +150,16 @@ public class Parser {
         Parser p = new Parser();
         String text = "The Wonder Years' second full-length album, The Upsides, was released on January 26, 2010.";
         p.compile("src/resources/files/tokens.xml");
-        List<Token> list = p.parse(text);
+        List<Token> list = null;
+        list = p.parse(text);
         Utilities.printTokensAndIgnoreAtts(list,text);
+
+        System.out.println();
+
+        Utilities.printTokensAndIgnoreAtts(
+                p.parse("Mayday Parade's debut EP 'Tales Told by Dead Friends' was released in 2006, and sold over 50,000 copies without any label support.")
+                ,"Mayday Parade's debut EP 'Tales Told by Dead Friends' was released in 2006, and sold over 50,000 copies without any label support.");
+        p.lexer.printReport();
 
     }
 }

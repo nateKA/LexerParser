@@ -21,9 +21,10 @@ public class Utilities {
     public static final String ADD_SLASHES = "addSlashes";
     public static final String MIN = "min";
     public static final String MAX = "max";
+    public static final String ID = "tokenID";
 
     public static final String[] DO_NOT_COPY_ATTRIBUTES = new String[]{
-            TAG,IGNORE_CASE,BOUNDARIES,ADD_SLASHES
+            TAG,IGNORE_CASE,BOUNDARIES,ADD_SLASHES,ID
     };
     public static final String[] RESERVED_ATTRIBUTES = new String[]{
             FINDING_TEXT_NAME,FINDING_START_INDEX_NAME,FINDING_END_INDEX_NAME,

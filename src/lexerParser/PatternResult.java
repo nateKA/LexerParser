@@ -41,6 +41,51 @@ public class PatternResult {
         while(iter.hasNext()){
             String key = iter.next();
             String value = map.get(key).toString();
+            if(value.matches("inherit\\(.*?=.*?\\(\\s*\\d+\\s*\\)\\)")){
+                Matcher m = java.util.regex.Pattern.compile("inherit\\((.+?)=(.+?)\\(\\s*(\\d+)\\s*\\)\\)").matcher(value);
+                if(m.find()){
+                    MatchResult res = m.toMatchResult();
+                    String getKey = res.group(1);
+                    String matchTo = res.group(2);
+                    int index = Integer.parseInt(res.group(3).trim());
+                    boolean found = false;
+                    int count = 0;
+                    for(Token t: tokens){
+                        if(t.getString(getKey)!=null){
+
+                            if(count == index && t.getString(getKey).equals(matchTo)) {
+                                found= true;
+                                toInherit.put(key, t.getString(Utilities.FINDING_TEXT_NAME));
+                                count++;
+                                break;
+                            }
+                        }
+                    }
+                    if(!found)
+                        toRemove.add(key);
+                }
+            }else
+            if(value.matches("inherit\\(.*?=.*?\\(\\s*last\\s*\\)\\)")){
+                Matcher m = java.util.regex.Pattern.compile("inherit\\((.+?)=(.+?)\\(\\s*last\\s*\\)\\)").matcher(value);
+                if(m.find()){
+                    MatchResult res = m.toMatchResult();
+                    String getKey = res.group(1);
+                    String matchTo = res.group(2);
+                    boolean found = false;
+                    for(Token t: tokens){
+                        if(t.getString(getKey)!=null){
+
+                            if(t.getString(getKey).equals(matchTo)) {
+                                found= true;
+                                toInherit.put(key, t.getString(Utilities.FINDING_TEXT_NAME));
+                                break;
+                            }
+                        }
+                    }
+                    if(!found)
+                        toRemove.add(key);
+                }
+            }else
             if(value.matches("inherit\\(.*?\\(\\s*\\d+\\s*\\)\\)")){
                 Matcher m = java.util.regex.Pattern.compile("inherit\\((.*?)\\((\\d+)\\)\\)").matcher(value);
                 if(m.find()){

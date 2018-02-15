@@ -118,9 +118,9 @@ public class XMLParser {
 
     public static void main(String[] args){
         XMLParser parser = new XMLParser();
-        XMLDocument doc = parser.parseXML("src/resources/files/tokens.xml");
+        XMLDocument doc = parser.parseXML("src/resources/files/test.xml");
         System.out.println(doc.getRoot());
-        for(XMLElement e: doc.collect("XMLBody.tokens.token.regex")){
+        for(XMLElement e: doc.collectAllByTag("bottom")){
             System.out.println(e);
         }
         //System.out.println(doc.getRoot());

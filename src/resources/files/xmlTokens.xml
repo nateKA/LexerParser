@@ -84,7 +84,7 @@
                 </rubric>
             </rule>
         </pattern>
-        <pattern type="openTag">
+        <pattern type="openTag" tag="inherit(type=word(last))">
             <rule>
                 <rubric>
                     <check>type=lt</check>

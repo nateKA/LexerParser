@@ -1,0 +1,19 @@
+<XMLBody>
+    <top>
+        <middle>
+            <bottom>Hello</bottom>
+        </middle>
+        <other>
+            <bottom>goodbye</bottom>
+        </other>
+    </top>
+    <top>
+        <middle >
+            <bottom>Hi</bottom>
+        </middle>
+        <middle >
+            <bottom>Greetings</bottom>
+            <bottom>Fellow human!</bottom>
+        </middle>
+    </top>
+</XMLBody>

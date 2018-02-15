@@ -141,6 +141,8 @@ public class Rubric {
 
         return passing;
     }
+
+    //TODO: implement checkInt
     private boolean checkInt(String key, int val){
         return true;
     }

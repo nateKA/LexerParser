@@ -49,9 +49,14 @@ public class Lexer {
 
         List<Token> tokens = new ArrayList<>();
         for(TokenGenerator t: tokenGenerators){
+            long start = System.currentTimeMillis();
+
             List<Token> newTokens = executeRule(tokens,t,s);
             tokens.addAll(newTokens);
             tokens = RegexHelper.breakApart(tokens);
+
+            updateRunTimeMap(t.e.getAttribute(Utilities.ID),((System.currentTimeMillis()-start)/1000.0));
+            updateCountMap(t.e.getAttribute(Utilities.ID),newTokens.size());
         }
 
         return tokens;
@@ -77,7 +82,6 @@ public class Lexer {
      * @return
      */
     private List<Token> executeRule(List<Token> tokens, TokenGenerator tg, String s){
-        long start = System.currentTimeMillis();
 
         //Get regex properties
         boolean ignoreCase = "true".equals(tg.e.getAttribute("ignoreCase"));
@@ -86,8 +90,7 @@ public class Lexer {
         List<Token> newTokens = RegexHelper.search(s,tg.regex,ignoreCase);
         finalizeTokens(newTokens,tg.e,tg.inheritMap);
 
-        updateRunTimeMap(tg.e.getAttribute("type"),((System.currentTimeMillis()-start)/1000.0));
-        updateCountMap(tg.e.getAttribute("type"),newTokens.size());
+
 
         return newTokens;
     }
@@ -105,6 +108,29 @@ public class Lexer {
         }
         int value = tokenCountMap.get(key);
         tokenCountMap.put(key,value+count);
+    }
+
+    public void printReport(){
+        printRuntimeReport();
+        printCountReport();
+    }
+    public void printCountReport(){
+        Iterator<String> iter = runTimeMap.keySet().iterator();
+        System.out.println("\nToken counts");
+        while(iter.hasNext()){
+            String key = iter.next();
+            int val = tokenCountMap.get(key);
+            System.out.println(String.format("\t%s -> %d",key,val));
+        }
+    }
+    public void printRuntimeReport(){
+        Iterator<String> iter = runTimeMap.keySet().iterator();
+        System.out.println("Runtime Report (seconds)");
+        while(iter.hasNext()){
+            String key = iter.next();
+            double val = runTimeMap.get(key);
+            System.out.println(String.format("\t%s -> %.6f",key,val));
+        }
     }
 
     /**

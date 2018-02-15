@@ -83,6 +83,23 @@ public class XMLDocument {
         return list;
     }
 
+    public List<XMLElement> collectAllByTag(String tag){
+        List<XMLElement> list = new ArrayList<>();
+        XMLElement root = getRoot();
+        list.addAll(collectAllByTagHelper(tag,root));
+        return list;
+    }
+    private List<XMLElement> collectAllByTagHelper(String tag,XMLElement root){
+        List<XMLElement> list= new ArrayList<>();
+        if(root.getTag().equals(tag)){
+            list.add(root);
+        }
+        for(XMLElement e: root.getSubElements()){
+            list.addAll(collectAllByTagHelper(tag,e));
+        }
+        return list;
+    }
+
     public XMLElement getProlog() {
         return prolog;
     }
